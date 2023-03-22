@@ -1,0 +1,22 @@
+{% extends "thread-layout.html" %}
+
+{% block content %}
+
+{% if session.username %}
+
+<div class="conversation-box">
+    <h2>{{ message.header }}</h2>
+    <table>
+        <tr>
+            <td class="message-username">{{ message.username }} says:</td>
+            <td class="message-content">{{ message.content }}</td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+{% endif %}
+
+{% endblock %}

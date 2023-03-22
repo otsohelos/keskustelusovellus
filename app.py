@@ -95,7 +95,7 @@ def newconversation():
     cache["message"] = ""
     message_content = cache["content"]
     cache["content"] = ""
-    return render_template("newconversation.html", message=message, content = message_content)
+    return render_template("newconversation.html", message=message, content=message_content)
 
 
 @app.route("/newconversationsubmit", methods=["POST"])
@@ -104,7 +104,7 @@ def newconversationsubmit():
     content = request.form.get("convo-content", "")
     if header == "":
         cache["content"] = content
-        cache["message"] = "Otsikko puuttuu"
+        cache["message"] = "Otsikko on pakollinen"
         return redirect("/newconversation")
     else:
         username = session["username"]
@@ -114,3 +114,11 @@ def newconversationsubmit():
             sql, {"username": username, "header": header, "content": content})
         db.session.commit()
         return redirect("/")
+
+
+@app.route("/thread/<int:id>")
+def thread(id):
+    sql = text("SELECT username, header, content FROM conversations WHERE id=:id")
+    result = db.session.execute(sql, {"id": id})
+    message = result.fetchone()
+    return render_template("thread.html", message=message)

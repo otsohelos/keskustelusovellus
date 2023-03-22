@@ -12,6 +12,7 @@ app.secret_key = getenv("SECRET_KEY")
 
 cache = {}
 cache["message"] = ""
+cache["content"] = ""
 
 
 @app.route("/")
@@ -70,11 +71,11 @@ def signupsubmit():
         db.session.execute(
             sql, {"username": username, "password": hash_value, "userlevel": userlevel})
         db.session.commit()
-        return redirect("/success")
+        return redirect("/signupsuccess")
     else:
-        cache["message"] = "Käyttäjänimi {} on jo olemassa. Valitse toinen käyttäjänimi.".format(username)
+        cache["message"] = "Käyttäjänimi {} on jo olemassa. Valitse toinen käyttäjänimi.".format(
+            username)
         return redirect("/signup")
-
 
 
 @app.route("/logout")
@@ -83,6 +84,33 @@ def logout():
     return redirect("/")
 
 
-@app.route("/success")
-def success():
-    return render_template("success.html")
+@app.route("/signupsuccess")
+def signupsuccess():
+    return render_template("signupsuccess.html")
+
+
+@app.route("/newconversation")
+def newconversation():
+    message = cache["message"]
+    cache["message"] = ""
+    message_content = cache["content"]
+    cache["content"] = ""
+    return render_template("newconversation.html", message=message, content = message_content)
+
+
+@app.route("/newconversationsubmit", methods=["POST"])
+def newconversationsubmit():
+    header = request.form.get("convo-header", "")
+    content = request.form.get("convo-content", "")
+    if header == "":
+        cache["content"] = content
+        cache["message"] = "Otsikko puuttuu"
+        return redirect("/newconversation")
+    else:
+        username = session["username"]
+        sql = text(
+            "INSERT INTO conversations (username, header, content) VALUES (:username, :header, :content)")
+        db.session.execute(
+            sql, {"username": username, "header": header, "content": content})
+        db.session.commit()
+        return redirect("/")

@@ -66,6 +66,7 @@ body {
   .contentbox form {
     width: 700px;
   }
+  
   .contentbox form input[type=submit] {
     width: 300px;
     height:30px;
@@ -80,8 +81,8 @@ body {
     margin: 40px 0 0 0;
     width: 300px;
     height:30px;
-    border: 3px solid #00593e;
-    background-color: #04AA6D;
+    border: 3px solid #04AA6D;
+    background-color: #aad7c6;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     border-radius: 8px;
   }

@@ -2,7 +2,10 @@
 
 {% block content %}
 
-    <h1>Kirjaudu sisään keskustelusovellukseen</h1>
+    <h1>Luo uusi tili</h1>
+    {% if message %}
+    <p class="errormessage">{{ message }}</p>
+    {% endif %}
     <form action="/signupsubmit" method="POST">
         <input type="text" name="username" placeholder="Käyttäjänimi">
         <br>

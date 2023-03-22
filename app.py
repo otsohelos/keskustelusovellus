@@ -13,10 +13,12 @@ app.secret_key = getenv("SECRET_KEY")
 cache = {}
 cache["message"] = ""
 
+
 @app.route("/")
 def index():
     result = db.session.execute(text("SELECT * FROM conversations"))
     return render_template("index.html", conversations=result)
+
 
 @app.route("/login")
 def login():
@@ -24,17 +26,21 @@ def login():
     cache["message"] = ""
     return render_template("login.html", message=message)
 
+
 @app.route("/signup")
 def signup():
-    return render_template("signup.html")
+    message = cache["message"]
+    cache["message"] = ""
+    return render_template("signup.html", message=message)
+
 
 @app.route("/loginsubmit", methods=["POST"])
 def loginsubmit():
     username = request.form["username"]
     password = request.form["password"]
     sql = text("SELECT id, password FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username":username})
-    user = result.fetchone()    
+    result = db.session.execute(sql, {"username": username})
+    user = result.fetchone()
     if not user:
         # TODO: invalid username
         cache["message"] = "Käyttäjänimeä ei löydy"
@@ -48,21 +54,34 @@ def loginsubmit():
         return redirect("/login")
     return redirect("/")
 
+
 @app.route("/signupsubmit", methods=["POST"])
 def signupsubmit():
     username = request.form["username"]
     password = request.form["password"]
-    userlevel="user"
+    userlevel = "user"
     hash_value = generate_password_hash(password)
-    sql = text("INSERT INTO users (username, password, userlevel) VALUES (:username, :password, :userlevel)")
-    db.session.execute(sql, {"username":username, "password":hash_value, "userlevel":userlevel})
-    db.session.commit()
-    return redirect("/success")
+    sql = text("SELECT id, password FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username": username})
+    user = result.fetchone()
+    if not user:
+        sql = text(
+            "INSERT INTO users (username, password, userlevel) VALUES (:username, :password, :userlevel)")
+        db.session.execute(
+            sql, {"username": username, "password": hash_value, "userlevel": userlevel})
+        db.session.commit()
+        return redirect("/success")
+    else:
+        cache["message"] = "Käyttäjänimi {} on jo olemassa. Valitse toinen käyttäjänimi.".format(username)
+        return redirect("/signup")
+
+
 
 @app.route("/logout")
 def logout():
     del session["username"]
     return redirect("/")
+
 
 @app.route("/success")
 def success():

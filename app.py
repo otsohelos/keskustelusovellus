@@ -15,12 +15,13 @@ cache["message"] = ""
 
 @app.route("/")
 def index():
-    result = db.session.execute(text("SELECT * FROM users"))
-    return render_template("index.html")
+    result = db.session.execute(text("SELECT * FROM conversations"))
+    return render_template("index.html", conversations=result)
 
 @app.route("/login")
 def login():
     message = cache["message"]
+    cache["message"] = ""
     return render_template("login.html", message=message)
 
 @app.route("/signup")

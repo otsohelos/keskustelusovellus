@@ -2,14 +2,11 @@
 
 {% block content %}
 
-<body>
     <h1>Kirjaudu sisään keskustelusovellukseen</h1>
     <form action="/signupsubmit" method="POST">
-        Käyttäjänimi:
-        <input type="text" name="username">
+        <input type="text" name="username" placeholder="Käyttäjänimi">
         <br>
-        Salasana:
-        <input type="password" name="password">
+        <input type="password" name="password" placeholder="Salasana">
         <br>
         <input type="submit" value="Lähetä">
     </form>

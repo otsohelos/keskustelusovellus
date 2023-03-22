@@ -4,14 +4,12 @@
 
     <h1>Kirjaudu sisään keskustelusovellukseen</h1>
     {% if message %}
-    <p>{{ message }}</p>
+    <p class="errormessage">{{ message }}</p>
     {% endif %}
     <form action="/loginsubmit" method="POST">
-        Käyttäjänimi:
-        <input type="text" name="username">
+        <input type="text" name="username" placeholder="Käyttäjänimi">
         <br>
-        Salasana:
-        <input type="password" name="password">
+        <input type="password" name="password" placeholder="Salasana">
         <br>
         <input type="submit" value="Lähetä">
     </form>

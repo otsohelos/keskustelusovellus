@@ -2,15 +2,31 @@
 
 {% block content %}
 
-    <h1>Tervetuloa keskustelusovelukseen</h1>
+<h1>Tervetuloa keskustelusovelukseen</h1>
 
-    {% if session.username %}
-    <p>Olet kirjautunut nimellä {{ session.username }}</p>
-    <a href="/logout"><button type="button">Kirjaudu ulos</button></a>
-    {% else %}
-    <p><a href="/login" rel="noopener noreferrer">Kirjaudu sisään</a></p>
-    <p><a href="/signup" rel="noopener noreferrer">Luo uusi tili</a></p>
-    <br>
-    {% endif %}
+{% if session.username %}
+<p>Olet kirjautunut nimellä {{ session.username }}</p>
+<a href="/logout"><button type="button">Kirjaudu ulos</button></a>
+
+<div class="conversation-box">
+    <h2>Kaikki keskustelut</h2>
+    <table>
+        {% for message in conversations %}
+        <tr>
+            <td class="message-username">{{ message.username }} says:</td>
+            <td class="message-content">{{ message.content }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<button class="new-conversation">Uusi keskustelu</button>
+{% else %}
+<p><a href="/login" rel="noopener noreferrer">Kirjaudu sisään</a></p>
+<p><a href="/signup" rel="noopener noreferrer">Luo uusi tili</a></p>
+<br>
+
+
+{% endif %}
 
 {% endblock %}

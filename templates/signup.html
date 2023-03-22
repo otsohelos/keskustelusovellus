@@ -1,7 +1,6 @@
-<head>
-    <title>Luo uusi tili</title>
-    <link rel="stylesheet" href="static/stylesheet.css">
-</head>
+{% extends "layout.html" %}
+
+{% block content %}
 
 <body>
     <h1>Kirjaudu sisään keskustelusovellukseen</h1>
@@ -14,4 +13,5 @@
         <br>
         <input type="submit" value="Lähetä">
     </form>
-</body>
+
+    {% endblock %}

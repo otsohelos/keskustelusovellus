@@ -4,4 +4,42 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #444;
   }
+
+  .header {
+    color:rgb(96, 96, 96);
+    font-size: 20;
+    padding: 30px;
+    background-color:rgb(206, 217, 240);
+  }
+
+  .header a{
+    text-decoration: none;
+    color:rgb(96, 96, 96);
+
+  }
+
+  .header img {
+    padding: 10;
+    vertical-align: middle;
+    text-decoration: none;
+  }
+
   
+  .contentbox {
+    padding: 20px;
+  }
+
+  .footer {
+    padding: 30px;
+    background-color:rgb(206, 217, 240)
+  }
+
+  .contentbox a, .contentbox a:visited {
+    color:rgb(21, 129, 102);
+    text-decoration: none;
+  }
+
+  .contentbox a:hover, .contentbox a:active {
+    color:rgb(12, 82, 65);
+    text-decoration: none;
+  }

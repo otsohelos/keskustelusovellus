@@ -10,6 +10,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 db = SQLAlchemy(app)
 app.secret_key = getenv("SECRET_KEY")
 
+cache = {}
+cache["message"] = ""
 
 @app.route("/")
 def index():
@@ -18,7 +20,8 @@ def index():
 
 @app.route("/login")
 def login():
-    return render_template("login.html")
+    message = cache["message"]
+    return render_template("login.html", message=message)
 
 @app.route("/signup")
 def signup():
@@ -28,7 +31,20 @@ def signup():
 def loginsubmit():
     username = request.form["username"]
     password = request.form["password"]
-    session["username"] = username
+    sql = text("SELECT id, password FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username":username})
+    user = result.fetchone()    
+    if not user:
+        # TODO: invalid username
+        cache["message"] = "Käyttäjänimeä ei löydy"
+        return redirect("/login")
+    else:
+        hash_value = user.password
+    if check_password_hash(hash_value, password):
+        session["username"] = username
+    else:
+        cache["message"] = "Väärä salasana"
+        return redirect("/login")
     return redirect("/")
 
 @app.route("/signupsubmit", methods=["POST"])

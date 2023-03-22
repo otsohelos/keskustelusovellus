@@ -1,10 +1,11 @@
-<head>
-    <title>Kirjaudu sisään</title>
-    <link rel="stylesheet" href="static/stylesheet.css">
-</head>
+{% extends "layout.html" %}
 
-<body>
+{% block content %}
+
     <h1>Kirjaudu sisään keskustelusovellukseen</h1>
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
     <form action="/loginsubmit" method="POST">
         Käyttäjänimi:
         <input type="text" name="username">
@@ -15,3 +16,5 @@
         <input type="submit" value="Lähetä">
     </form>
 </body>
+
+{% endblock %}

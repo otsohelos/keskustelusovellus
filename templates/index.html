@@ -1,9 +1,7 @@
-<head>
-    <title>Keskustelusovellus</title>
-    <link rel="stylesheet" href="static/stylesheet.css">
-</head>
+{% extends "layout.html" %}
 
-<body>
+{% block content %}
+
     <h1>Tervetuloa keskustelusovelukseen</h1>
 
     {% if session.username %}
@@ -14,4 +12,5 @@
     <p><a href="/signup" rel="noopener noreferrer">Luo uusi tili</a></p>
     <br>
     {% endif %}
-</body>
+
+{% endblock %}

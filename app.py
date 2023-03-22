@@ -33,8 +33,8 @@ def signupsubmit():
     sql = text("INSERT INTO users (username, password, userlevel) VALUES (:username, :password, :userlevel)")
     db.session.execute(sql, {"username":username, "password":hash_value, "userlevel":userlevel})
     db.session.commit()
-    return redirect("success.html")
+    return redirect("/success")
 
-@app.route("/result", methods=["POST"])
-def result():
-    return render_template("result.html", name=request.form["name"])
+@app.route("/success")
+def success():
+    return render_template("success.html")

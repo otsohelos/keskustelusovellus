@@ -4,9 +4,14 @@
 </head>
 
 <body>
-    {{ header }}
     <h1>Tervetuloa keskustelusovelukseen</h1>
+
+    {% if session.username %}
+    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    <a href="/logout"><button type="button">Kirjaudu ulos</button></a>
+    {% else %}
     <p><a href="/login" rel="noopener noreferrer">Kirjaudu sisään</a></p>
     <p><a href="/signup" rel="noopener noreferrer">Luo uusi tili</a></p>
     <br>
+    {% endif %}
 </body>

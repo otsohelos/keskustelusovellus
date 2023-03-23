@@ -2,18 +2,18 @@
 
 ## Sovelluksen tarkoitus
 
-Harjoitustyössäni toteuta keskustelusovelluksen, jossa käyttäjät voivat kirjautua, lukea kerkusteluja, kommentoida olemassaolevia keskusteluja ja luoda uusia aloituksia.
+Harjoitustyössäni toteutan keskustelusovelluksen, jossa käyttäjät voivat kirjautua, lukea keskusteluja, kommentoida olemassa olevia keskusteluja ja luoda uusia aloituksia.
 
 ## Keskeiset ominaisuudet
 
 Sovellus tulee sisältämään seuraavat toiminnot:
 * Käyttäjä voi rekisteröidä uuden tunnuksen ja siihen liittyvän salasanan
 * Käyttäjä voi kirjautua sisään tunnuksella ja salasanalla
-* Sisäänkirjautunut käyttäjä voi lukea olemassaolevia keskusteluja
-* Sisäänkirjautunut käyttäjä voi kommentoida olemassaolevia keskusteluja
+* Sisäänkirjautunut käyttäjä voi lukea olemassa olevia keskusteluja
+* Sisäänkirjautunut käyttäjä voi kommentoida olemassa olevia keskusteluja
 * Sisäänkirjautunut käyttäjä voi aloittaa uuden keskustelun
 * Käyttäjä voi poistaa oman kommenttinsa
-* Käyttäjä voi muokata omaa kommenttian tai keskustelunaloitustaan
+* Käyttäjä voi muokata omaa kommenttiaan tai keskustelunaloitustaan
 
 ## Sivunäkymät
 

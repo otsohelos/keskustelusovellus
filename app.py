@@ -1,3 +1,5 @@
+import datetime
+import pytz
 from flask import Flask, url_for
 from flask import render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
@@ -123,7 +125,8 @@ def thread(id):
     sql = text("SELECT username, header, content, id FROM conversations WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
     message = result.fetchone()
-    sql = text("SELECT * from replies where thread_id=:id")
+    #message= message.replace("\r", "<br>")
+    sql = text("SELECT * from replies where thread_id=:id AND deleted_at IS NULL")
     result = db.session.execute(sql, {"id": id})
     replies = result.fetchall()
     return render_template("thread.html", message=message, errormessage=errormessage, replies=replies)
@@ -138,10 +141,37 @@ def replysubmit(id):
         return redirect(url_for('thread', id=id))
     else:
         username = session["username"]
+        content_with_linebreaks = content.replace("\r", "<br>")
         thread_id = id
         sql = text(
             "INSERT INTO replies (username, content, thread_id) VALUES (:username, :content, :thread_id)")
         db.session.execute(
-            sql, {"username": username, "content": content, "thread_id": thread_id})
+            sql, {"username": username, "content": content_with_linebreaks, "thread_id": thread_id})
         db.session.commit()
         return redirect("/")
+
+@app.route("/deletereply/<int:id>")
+def deletereply(id):
+    sql = text("SELECT * FROM replies WHERE id=:id")
+    result = db.session.execute(sql, {"id": id})
+    reply = result.fetchone()
+    if not reply:
+        cache["message"] = "Tapahtui virhe. Yritä myöhemmin uudelleen."
+        return redirect("/")
+    if reply.username != session["username"]:
+        cache["message"] = "Tapahtui virhe. Yritä myöhemmin uudelleen."
+        thread_id = reply.thread_id
+        return redirect(url_for('thread', id=thread_id))
+    else:
+        id = reply.id
+        thread_id = reply.thread_id
+        sql = text("UPDATE replies SET deleted_at = :timestamp WHERE id=:id")
+        timestamp = datetime.datetime.now(pytz.timezone("Europe/Helsinki"))
+        db.session.execute(sql, {"id": id, "timestamp": timestamp})
+        db.session.commit()
+        return redirect(url_for('thread', id=thread_id))
+
+
+@app.route("/editreply/<int:id>")
+def editreply(id):
+    return str(id)

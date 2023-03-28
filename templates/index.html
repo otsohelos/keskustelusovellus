@@ -3,7 +3,9 @@
 {% block content %}
 
 <h1>Tervetuloa keskustelusovelukseen</h1>
-
+{% if errormessage %}
+<p class="errormessage">{{ errormessage }}</p>
+{% endif %}
 {% if session.username %}
 
 <div class="conversation-box">

@@ -40,11 +40,14 @@ $ pip install -r ./requirements.txt
 ```
 
 Määritä vielä tietokannan skeema komennolla
-
 ```
 $ psql < schema.sql
 ```
 Nyt voit käynnistää sovelluksen komennolla
 ```
 $ flask run
+```
+Kehitysaikainen käynnistys, jossa muutokset päivittyvät sivun päivittyessä:
+```
+$ flask run --debug
 ```

@@ -12,20 +12,12 @@
 </div>
 <div class="conversation-box">
     <div class="starter-box">
-        <table>
-            <tr>
-                <td>
-                    <div class="message-username">
-                        <h3>{{ message.username }}</h3>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="message-content">{{ message.content }}</div>
-                </td>
-            </tr>
-        </table>
+
+        <div class="message-username">
+            <h3>{{ message.username }}</h3>
+        </div>
+
+        <div class="message-content">{{ message.content }}</div>
     </div>
 
     {% for reply in replies: %}
@@ -34,14 +26,19 @@
             <h3>{{ reply.username }}</h3>
         </div>
         <div class="message-content">{{ reply.content }}</div>
+        {% if reply.username == session.username %}
+        <div class="reply-actions-box">
+            <a href="{{ url_for('editreply', id=reply.id) }}"><img src="/static/pencil.png"></a>
+            <a href="{{ url_for('deletereply', id=reply.id) }}"><img src="/static/trashcan.png"></a>
+        </div>
+        {% endif %}
     </div>
     {% endfor %}
-    <form action="{{ url_for('replysubmit', id=message.id) }}" method="POST">
+    <form class="reply-form" action="{{ url_for('replysubmit', id=message.id) }}" method="POST">
         <textarea name="reply-content" placeholder="Vastaa" value="{{ content }}"></textarea>
         <br>
         <input type="submit" value="Lähetä">
     </form>
-
 </div>
 
 

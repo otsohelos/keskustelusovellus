@@ -1,17 +1,27 @@
 <head>
     <title>Keskustelusovellus</title>
-    <link rel="stylesheet" href="static/stylesheet.css">
+    <link rel="stylesheet" href="/static/stylesheet.css">
 </head>
 
 <body>
     <div class="header">
-        <a href="/" rel="noopener noreferrer"><img src="static/logo-transparent.png">Keskustelusovellus</a>
+        <a href="/" rel="noopener noreferrer"><div class="app-name"><img class="logo" src="/static/logo-transparent.png">Keskustelusovellus</div></a>
+        {% if session.username %}
+        <div class="header-usersection">
+            <img class="usericon" src="/static/usericon.png">
+            <b>{{ session.username }}</b>
+            <a href="/logout"><button class="logout-button" type="button">Kirjaudu ulos</button></a>
+        </div>
+        {% endif %}
+
     </div>
     <div class="contentbox">
         {% block content %}
         {% endblock %}
     </div>
     <div class="footer">
-        <p>Footer</p>
+        Otso Helos 2023
+        <br>
+        Tietokantasovellus-harjoitustyö
     </div>
 </body>

@@ -1,4 +1,4 @@
-{% extends "thread-layout.html" %}
+{% extends "layout.html" %}
 
 {% block content %}
 
@@ -7,29 +7,37 @@
 {% if errormessage %}
 <p class="errormessage">{{ errormessage }}</p>
 {% endif %}
+<div class="message-header">
+    <h2>{{ message.header }}</h2>
+</div>
 <div class="conversation-box">
-    <table>
-        <tr>
-            <td class="message-header">
-                <h2>{{ message.header }}</h2>
-            </td>
-        </tr>
-        <tr>
-            <td class="message-username">
-                <h3>{{ message.username }}</h3>
-            </td>
-        </tr>
-        <tr>
-            <td class="message-content">{{ message.content }}</td>
-        </tr>
-    </table>
+    <div class="starter-box">
+        <table>
+            <tr>
+                <td>
+                    <div class="message-username">
+                        <h3>{{ message.username }}</h3>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="message-content">{{ message.content }}</div>
+                </td>
+            </tr>
+        </table>
+    </div>
 
     {% for reply in replies: %}
-    <div>{{ reply.username }}</div>
-    <div>{{ reply.content }}</div>
+    <div class="reply-box">
+        <div class="message-username">
+            <h3>{{ reply.username }}</h3>
+        </div>
+        <div class="message-content">{{ reply.content }}</div>
+    </div>
     {% endfor %}
     <form action="{{ url_for('replysubmit', id=message.id) }}" method="POST">
-        <textarea name="reply-content" placeholder="Viesti" value="{{ content }}"></textarea>
+        <textarea name="reply-content" placeholder="Vastaa" value="{{ content }}"></textarea>
         <br>
         <input type="submit" value="Lähetä">
     </form>

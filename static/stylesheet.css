@@ -85,4 +85,27 @@ body {
     background-color: #aad7c6;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     border-radius: 8px;
+    font-size: large;
+  }
+
+  .reply-button {
+    margin: 40px 0 0 0;
+    width: 200px;
+    height:30px;
+    border: 3px solid #04AA6D;
+    background-color: #aad7c6;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border-radius: 8px;
+    font-size: large;
+  }
+
+  textarea {
+    height: 300px;
+    width: 400px;
+    border: 1px solid #00593e;
+    border-radius: 4px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    box-sizing: border-box;
+    font-size: 16px;
+    margin: 10px 0 10px 0;
   }

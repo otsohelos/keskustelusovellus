@@ -3,8 +3,8 @@
 {% block content %}
 
     <h1>Kirjaudu sisään keskustelusovellukseen</h1>
-    {% if message %}
-    <p class="errormessage">{{ message }}</p>
+    {% if errormessage %}
+    <p class="errormessage">{{ errormessage }}</p>
     {% endif %}
     <form action="/loginsubmit" method="POST">
         <input type="text" name="username" placeholder="Käyttäjänimi">

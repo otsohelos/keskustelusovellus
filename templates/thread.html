@@ -4,19 +4,39 @@
 
 {% if session.username %}
 
+{% if errormessage %}
+<p class="errormessage">{{ errormessage }}</p>
+{% endif %}
 <div class="conversation-box">
-    <h2>{{ message.header }}</h2>
     <table>
         <tr>
-            <td class="message-username">{{ message.username }} says:</td>
+            <td class="message-header">
+                <h2>{{ message.header }}</h2>
+            </td>
+        </tr>
+        <tr>
+            <td class="message-username">
+                <h3>{{ message.username }}</h3>
+            </td>
+        </tr>
+        <tr>
             <td class="message-content">{{ message.content }}</td>
         </tr>
     </table>
+
+    {% for reply in replies: %}
+    <div>{{ reply.username }}</div>
+    <div>{{ reply.content }}</div>
+    {% endfor %}
+    <form action="{{ url_for('replysubmit', id=message.id) }}" method="POST">
+        <textarea name="reply-content" placeholder="Viesti" value="{{ content }}"></textarea>
+        <br>
+        <input type="submit" value="Lähetä">
+    </form>
+
 </div>
 
 
 
-
 {% endif %}
-
 {% endblock %}

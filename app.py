@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, url_for
 from flask import render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
@@ -23,16 +23,16 @@ def index():
 
 @app.route("/login")
 def login():
-    message = cache["message"]
+    errormessage = cache["message"]
     cache["message"] = ""
-    return render_template("login.html", message=message)
+    return render_template("login.html", errormessage=errormessage)
 
 
 @app.route("/signup")
 def signup():
-    message = cache["message"]
+    errormessage = cache["message"]
     cache["message"] = ""
-    return render_template("signup.html", message=message)
+    return render_template("signup.html", errormessage=errormessage)
 
 
 @app.route("/loginsubmit", methods=["POST"])
@@ -91,11 +91,11 @@ def signupsuccess():
 
 @app.route("/newconversation")
 def newconversation():
-    message = cache["message"]
+    errormessage = cache["message"]
     cache["message"] = ""
     message_content = cache["content"]
     cache["content"] = ""
-    return render_template("newconversation.html", message=message, content=message_content)
+    return render_template("newconversation.html", errormessage=errormessage, content=message_content)
 
 
 @app.route("/newconversationsubmit", methods=["POST"])
@@ -118,7 +118,30 @@ def newconversationsubmit():
 
 @app.route("/thread/<int:id>")
 def thread(id):
-    sql = text("SELECT username, header, content FROM conversations WHERE id=:id")
+    errormessage = cache["message"]
+    cache["message"] = ""
+    sql = text("SELECT username, header, content, id FROM conversations WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
     message = result.fetchone()
-    return render_template("thread.html", message=message)
+    sql = text("SELECT * from replies where thread_id=:id")
+    result = db.session.execute(sql, {"id": id})
+    replies = result.fetchall()
+    return render_template("thread.html", message=message, errormessage=errormessage, replies=replies)
+
+
+@app.route("/replysubmit/<int:id>", methods=["POST"])
+def replysubmit(id):
+    content = request.form.get("reply-content", "")
+    if content == "":
+        cache["content"] = content
+        cache["message"] = "Kirjoita vastaus"
+        return redirect(url_for('thread', id=id))
+    else:
+        username = session["username"]
+        thread_id = id
+        sql = text(
+            "INSERT INTO replies (username, content, thread_id) VALUES (:username, :content, :thread_id)")
+        db.session.execute(
+            sql, {"username": username, "content": content, "thread_id": thread_id})
+        db.session.commit()
+        return redirect("/")

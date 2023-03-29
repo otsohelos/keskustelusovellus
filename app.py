@@ -221,3 +221,11 @@ def editreply(id):
         thread_id = reply.thread_id
         cache["reply_to_edit"] = reply_id
         return redirect(url_for('thread', id=thread_id))
+
+@app.route("/user/<string:username>")
+def user(username):
+    sql = text("SELECT * FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username": username})
+    user = result.fetchone()
+    return render_template("user.html", user=user)
+

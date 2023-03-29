@@ -10,18 +10,19 @@
 
 <div class="conversation-box">
     <h2>Kaikki keskustelut</h2>
-    <table>
-        {% for message in conversations %}
-        <tr>
-            <td class="message-header"><h2><a href="/thread/{{ message.id }}">{{ message.header }}</a></h2></td>
 
-            </tr>
-            <tr>
-            <td class="message-username">{{ message.username }} says:</td>
-            <td class="message-content">{{ message.content }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    {% for message in conversations %}
+    <div class="starter-box">
+
+    <div class="message-header">
+        <h2><a href="/thread/{{ message.id }}">{{ message.header }}</a></h2>
+    </div>
+
+    <div class="message-username"><h3>{{ message.username }}</h3></div>
+    <div class="message-content">{{ message.content }}</div>
+</div>
+    {% endfor %}
+</div>
 </div>
 
 <a href="/newconversation"><button class="new-conversation">Uusi keskustelu</button></a>

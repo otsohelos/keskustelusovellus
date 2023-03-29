@@ -8,7 +8,7 @@
     <form action="/newconversationsubmit" method="POST">
         <input type="text" name="convo-header" placeholder="Otsikko">
         <br>
-        <textarea name="convo-content" placeholder="Viesti" value="{{ content }}"></textarea>
+        <textarea name="convo-content" placeholder="Viesti">{{ content }}</textarea>
         <br>
         <input type="submit" value="Lähetä">
     </form>

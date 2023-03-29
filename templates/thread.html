@@ -1,9 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
 {% if session.username %}
-
 {% if errormessage %}
 <p class="errormessage">{{ errormessage }}</p>
 {% endif %}
@@ -22,20 +20,32 @@
 
     {% for reply in replies: %}
     <div class="reply-box">
+        {% if reply_to_edit == reply.id %}
+        {{ content }}
+        <h3>Muokkaa vastausta</h3>
+        <form class="reply-form" action="{{ url_for('replyeditsubmit', id=reply.id) }}" method="POST">
+            <textarea name="reply-content">{{ content }}</textarea>
+            <br>
+            <input type="submit" value="Lähetä">
+        </form>
+        {% else %}
         <div class="message-username">
             <h3>{{ reply.username }}</h3>
         </div>
         <div class="message-content">{{ reply.content }}</div>
         {% if reply.username == session.username %}
+
+
         <div class="reply-actions-box">
             <a href="{{ url_for('editreply', id=reply.id) }}"><img src="/static/pencil.png"></a>
             <a href="{{ url_for('deletereply', id=reply.id) }}"><img src="/static/trashcan.png"></a>
         </div>
         {% endif %}
+        {% endif %}
     </div>
     {% endfor %}
     <form class="reply-form" action="{{ url_for('replysubmit', id=message.id) }}" method="POST">
-        <textarea name="reply-content" placeholder="Vastaa" value="{{ content }}"></textarea>
+        <textarea name="reply-content" placeholder="Vastaa"></textarea>
         <br>
         <input type="submit" value="Lähetä">
     </form>

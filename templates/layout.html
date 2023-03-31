@@ -9,7 +9,7 @@
         {% if session.username %}
         <div class="header-usersection">
             <img class="usericon" src="/static/usericon.png">
-            <b>{{ session.username }}</b>
+            <b><a href="{{ url_for('user', username=session.username) }}">{{ session.username }}</a></b>
             <a href="/logout"><button class="logout-button" type="button">Kirjaudu ulos</button></a>
         </div>
         {% endif %}

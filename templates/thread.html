@@ -21,7 +21,6 @@
     {% for reply in replies: %}
     <div class="reply-box">
         {% if reply_to_edit == reply.id %}
-        {{ content }}
         <h3>Muokkaa vastausta</h3>
         <form class="reply-form" action="{{ url_for('replyeditsubmit', id=reply.id) }}" method="POST">
             <textarea name="reply-content">{{ content }}</textarea>

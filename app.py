@@ -163,13 +163,13 @@ def replysubmit(id):
 @app.route("/replyeditsubmit/<int:id>", methods=["POST"])
 def replyeditsubmit(id):
     content = request.form.get("reply-content", "")
+    sql = text(
+        "SELECT * from replies where id=:id AND deleted_at IS NULL")
+    result = db.session.execute(sql, {"id": id})
+    reply = result.fetchone()
+    thread_id = reply.thread_id
     if content == "":
-        sql = text(
-            "SELECT * from replies where id=:id AND deleted_at IS NULL")
-        result = db.session.execute(sql, {"id": id})
-        reply = result.fetchone()
-        thread_id = reply.thread_id
-        cache["content"] = content
+        cache["content"] = reply.content
         cache["reply_to_edit"] = id
         cache["errormessage"] = "Et voi muokata vastausta tyhjäksi"
         return redirect(url_for('thread', id=thread_id))
@@ -178,7 +178,7 @@ def replyeditsubmit(id):
         sql = text("UPDATE replies SET content = :content WHERE id = :id")
         db.session.execute(sql, {"content": content_with_linebreaks, "id": id})
         db.session.commit()
-        return redirect("/")
+        return redirect(url_for('thread', id=thread_id))
 
 
 @app.route("/deletereply/<int:id>")

@@ -88,6 +88,20 @@ body {
     padding: 10px;
   }
 
+  select {
+    width: 410px;
+    height: 30px; 
+    margin: 4px 0 0 40px;
+    border: 1px solid #00593e;
+    font-size: 14px;
+    border-radius: 4px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding: 0 0 0 10px;
+    background-color: white;
+    appearance: none; 
+
+  }
+
   .contentbox form div {
     width: 200px;
   }

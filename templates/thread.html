@@ -8,6 +8,8 @@
 <div class="message-header">
     <h2>{{ message.header }}</h2>
 </div>
+<div class="message-category">Kategoria: <a href="/category/{{ message.category }}">{{ message.display_name }}</a></div>
+
 <div class="conversation-box">
     <div class="starter-box">
 
@@ -37,13 +39,13 @@
 
         <div class="reply-actions-box">
             <a href="{{ url_for('editreply', id=reply.id) }}"><img src="/static/pencil.png"></a>
-            <a href="{{ url_for('deletereply', id=reply.id) }}"><img src="/static/trashcan.png"></a>
+            <a href="{{ url_for('deletereply', reply_id=reply.id) }}"><img src="/static/trashcan.png"></a>
         </div>
         {% endif %}
         {% endif %}
     </div>
     {% endfor %}
-    <form class="reply-form" action="{{ url_for('replysubmit', id=message.id) }}" method="POST">
+    <form class="reply-form" action="{{ url_for('replysubmit', thread_id=message.id) }}" method="POST">
         <textarea name="reply-content" placeholder="Vastaa"></textarea>
         <br>
         <input type="submit" value="Lähetä">

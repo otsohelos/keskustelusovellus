@@ -6,7 +6,14 @@
 {% endif %}
     <h1>Uusi keskustelu</h1>
     <form action="/newconversationsubmit" method="POST">
-        <input type="text" name="convo-header" placeholder="Otsikko">
+        <input type="text" name="convo-header" placeholder="Otsikko" value="{{ header }}">
+        <br>
+        <select id="category" name="convo-category">
+            <option disabled selected value>Kategoria:</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.display_name }}</option>
+            {% endfor %}
+        </select>
         <br>
         <textarea name="convo-content" placeholder="Viesti">{{ content }}</textarea>
         <br>

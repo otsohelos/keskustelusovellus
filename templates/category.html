@@ -9,14 +9,12 @@
 {% if session.username %}
 
 <div class="conversation-box">
-    <h2>Kaikki keskustelut</h2>
+    <h2>Kategoria: {{ category }}</h2>
 
     {% for message in conversations %}
     <div class="starter-box">
     <div class="message-header">
         <h2><a href="/thread/{{ message.id }}">{{ message.header }}</a></h2>
-        <div class="message-category">Kategoria: <a href="/category/{{ message.category }}">{{ message.display_name }}</a></div>
-
     </div>
 
     <div class="message-username"><h3><a href="{{ url_for('user', username=message.username) }}">{{ message.username }}</a></h3></div>

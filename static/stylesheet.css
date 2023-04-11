@@ -19,7 +19,7 @@ body {
   .errormessage {
     background-color: rgb(255, 173, 173);
     width: 300px;
-    padding: 5px;
+    padding: 10px;
     font-size: medium;
     float: left;
     border-radius: 8px;
@@ -163,8 +163,23 @@ body {
   }
 
   /*Message thread*/
-  .message-header {
+  .message-header h2 {
     font-size: larger;
+  }
+
+  .message-category {
+    float: right;
+    margin: -30px 200px 0 0;
+    color: rgb(144, 144, 144);
+  }
+
+  .message-category a, .message-category a:visited {
+    text-decoration: none;
+    color: rgb(108, 108, 108);
+  }
+  .message-category a:hover, .message-category a:active {
+    text-decoration: none;
+    color:rgb(12, 82, 65);
   }
 
   .message-username {

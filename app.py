@@ -17,82 +17,15 @@ app.secret_key = getenv("SECRET_KEY")
 cache = {}
 cache["errormessage"] = ""
 cache["content"] = ""
+cache["header"] = ""
 cache["reply_to_edit"] = 0
 
-
+# Main, thread , and user pages
 @app.route("/")
 def index():
     result = db.session.execute(
-        text("SELECT * FROM conversations ORDER BY id"))
+        text("SELECT * FROM conversations LEFT JOIN categories ON conversations.category=categories.id ORDER BY conversations.id"))
     return render_template("index.html", conversations=result)
-
-
-@app.route("/login")
-def login():
-    errormessage = cache["errormessage"]
-    cache["errormessage"] = ""
-    return render_template("login.html", errormessage=errormessage)
-
-
-@app.route("/signup")
-def signup():
-    errormessage = cache["errormessage"]
-    cache["errormessage"] = ""
-    return render_template("signup.html", errormessage=errormessage)
-
-
-@app.route("/loginsubmit", methods=["POST"])
-def loginsubmit():
-    username = request.form["username"]
-    password = request.form["password"]
-    sql = text("SELECT id, password FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    user = result.fetchone()
-    if not user:
-        # TODO: invalid username
-        cache["errormessage"] = "Käyttäjänimeä ei löydy"
-        return redirect("/login")
-    else:
-        hash_value = user.password
-    if check_password_hash(hash_value, password):
-        session["username"] = username
-    else:
-        cache["errormessage"] = "Väärä salasana"
-        return redirect("/login")
-    return redirect("/")
-
-
-@app.route("/signupsubmit", methods=["POST"])
-def signupsubmit():
-    username = request.form["username"]
-    password = request.form["password"]
-    userlevel = "user"
-    hash_value = generate_password_hash(password)
-    sql = text("SELECT id, password FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    user = result.fetchone()
-    if not user:
-        sql = text(
-            "INSERT INTO users (username, password, userlevel) VALUES (:username, :password, :userlevel)")
-        db.session.execute(
-            sql, {"username": username, "password": hash_value, "userlevel": userlevel})
-        db.session.commit()
-        return redirect("/signupsuccess")
-    else:
-        cache["errormessage"] = "Käyttäjänimi {} on jo olemassa. Valitse toinen käyttäjänimi.".format(
-            username)
-        return redirect("/signup")
-
-
-@app.route("/logout")
-def logout():
-    del session["username"]
-    return redirect("/")
-
-
-@app.route("/signupsuccess")
-def signupsuccess():
-    return render_template("signupsuccess.html")
 
 
 @app.route("/newconversation")
@@ -101,25 +34,10 @@ def newconversation():
     cache["errormessage"] = ""
     message_content = cache["content"]
     cache["content"] = ""
-    return render_template("newconversation.html", errormessage=errormessage, content=message_content)
-
-
-@app.route("/newconversationsubmit", methods=["POST"])
-def newconversationsubmit():
-    header = request.form.get("convo-header", "")
-    content = request.form.get("convo-content", "")
-    if header == "":
-        cache["content"] = content
-        cache["errormessage"] = "Otsikko on pakollinen"
-        return redirect("/newconversation")
-    else:
-        username = session["username"]
-        sql = text(
-            "INSERT INTO conversations (username, header, content) VALUES (:username, :header, :content)")
-        db.session.execute(
-            sql, {"username": username, "header": header, "content": content})
-        db.session.commit()
-        return redirect("/")
+    message_header = cache["header"]
+    cache["header"] = ""
+    categories = db.session.execute(text("SELECT * from CATEGORIES"))
+    return render_template("newconversation.html", errormessage=errormessage, content=message_content, categories=categories, header = message_header)
 
 
 @app.route("/thread/<int:id>")
@@ -141,7 +59,120 @@ def thread(id):
     return render_template("thread.html", message=message, errormessage=errormessage, replies=replies, reply_to_edit=reply_to_edit, content=content)
 
 
-@app.route("/replysubmit/<int:id>", methods=["POST"])
+@app.route("/category/<int:category_id>")
+def category(category_id):
+    sql = text("SELECT * FROM conversations LEFT JOIN categories ON conversations.category=categories.id WHERE category=:category_id ORDER BY conversations.id")
+    result = db.session.execute(sql, {"category_id": category_id})
+    conversations = result.fetchall()
+    sql = text("SELECT display_name FROM categories WHERE id=:category_id")
+    result = db.session.execute(sql, {"category_id": category_id})
+    category = result.fetchone().display_name
+    return render_template("category.html", conversations=conversations, category=category)
+
+
+@ app.route("/user/<string:username>")
+def user(username):
+    sql = text("SELECT * FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username": username})
+    user = result.fetchone()
+    return render_template("user.html", user=user)
+
+
+# Login, signup, logout routes
+@ app.route("/login")
+def login():
+    errormessage = cache["errormessage"]
+    cache["errormessage"] = ""
+    return render_template("login.html", errormessage=errormessage)
+
+
+@ app.route("/signupsuccess")
+def signupsuccess():
+    return render_template("signupsuccess.html")
+
+
+@ app.route("/signup")
+def signup():
+    errormessage = cache["errormessage"]
+    cache["errormessage"] = ""
+    return render_template("signup.html", errormessage=errormessage)
+
+
+@ app.route("/logout")
+def logout():
+    del session["username"]
+    return redirect("/")
+
+
+# Submit form routes
+@ app.route("/loginsubmit", methods=["POST"])
+def loginsubmit():
+    username = request.form["username"]
+    password = request.form["password"]
+    sql = text("SELECT id, password FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username": username})
+    user = result.fetchone()
+    if not user:
+        # TODO: invalid username
+        cache["errormessage"] = "Käyttäjänimeä ei löydy"
+        return redirect("/login")
+    else:
+        hash_value = user.password
+    if check_password_hash(hash_value, password):
+        session["username"] = username
+    else:
+        cache["errormessage"] = "Väärä salasana"
+        return redirect("/login")
+    return redirect("/")
+
+
+@ app.route("/signupsubmit", methods=["POST"])
+def signupsubmit():
+    username = request.form["username"]
+    password = request.form["password"]
+    userlevel = "user"
+    hash_value = generate_password_hash(password)
+    sql = text("SELECT id, password FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username": username})
+    user = result.fetchone()
+    if not user:
+        sql = text(
+            "INSERT INTO users (username, password, userlevel) VALUES (:username, :password, :userlevel)")
+        db.session.execute(
+            sql, {"username": username, "password": hash_value, "userlevel": userlevel})
+        db.session.commit()
+        return redirect("/signupsuccess")
+    else:
+        cache["errormessage"] = "Käyttäjänimi {} on jo olemassa. Valitse toinen käyttäjänimi.".format(
+            username)
+        return redirect("/signup")
+
+
+@ app.route("/newconversationsubmit", methods=["POST"])
+def newconversationsubmit():
+    header = request.form.get("convo-header", "")
+    content = request.form.get("convo-content", "")
+    category = int(request.form.get("convo-category", 0))
+    if header == "":
+        cache["content"] = content
+        cache["errormessage"] = "Otsikko on pakollinen"
+        return redirect("/newconversation")
+    if category == 0:
+        cache["content"] = content
+        cache["header"] = header
+        cache["errormessage"] = "Valitse kategoria"
+        return redirect("/newconversation")
+    else:
+        username = session["username"]
+        sql = text(
+            "INSERT INTO conversations (username, header, content, category) VALUES (:username, :header, :content, :category)")
+        db.session.execute(
+            sql, {"username": username, "header": header, "content": content, "category": category})
+        db.session.commit()
+        return redirect("/")
+
+
+@ app.route("/replysubmit/<int:id>", methods=["POST"])
 def replysubmit(id):
     content = request.form.get("reply-content", "")
     if content == "":
@@ -160,7 +191,7 @@ def replysubmit(id):
         return redirect(url_for('thread', id=id))
 
 
-@app.route("/replyeditsubmit/<int:id>", methods=["POST"])
+@ app.route("/replyeditsubmit/<int:id>", methods=["POST"])
 def replyeditsubmit(id):
     content = request.form.get("reply-content", "")
     sql = text(
@@ -221,11 +252,3 @@ def editreply(id):
         thread_id = reply.thread_id
         cache["reply_to_edit"] = reply_id
         return redirect(url_for('thread', id=thread_id))
-
-@app.route("/user/<string:username>")
-def user(username):
-    sql = text("SELECT * FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    user = result.fetchone()
-    return render_template("user.html", user=user)
-

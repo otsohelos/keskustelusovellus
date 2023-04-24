@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% if errormessage %}
+<p class="errormessage">{{ errormessage }}</p>
+{% endif %}
+{{ session["username"] }}
+    <h1>Muokkaa käyttäjätietoja</h1>
+    <form action="/userinfosubmit" method="POST">
+        <input type="text" name="display_name" placeholder="Nimi" value="{{ userinfo.display_name }}">
+        <br>
+        <input type="text" name="email" placeholder="Sähköposti" value="{{ userinfo.email }}">
+        <br>
+        <input type="checkbox" id="email-is-public" name="emailpublic" value="{{ userinfo.email_is_public }}">
+        <label for="email-is-public"> Näytä sähköposti muille käyttäjille</label><br>        
+        <br>
+        <textarea name="about-me" placeholder="Tietoa minusta">{{ userinfo.about_me }}</textarea>
+        <br>
+        <input type="submit" value="Tallenna">
+    </form>
+</body>
+
+{% endblock %}

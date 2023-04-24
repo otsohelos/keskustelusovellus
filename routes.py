@@ -62,8 +62,16 @@ def category(category_id):
 
 @app.route("/user/<string:username>")
 def user(username):
-    current_user = get_current_user(username)
-    return render_template("user.html", user=current_user)
+    this_user = get_user(username)
+    this_userinfo = get_userinfo(this_user.id)
+    return render_template("user.html", user=this_user, userinfo=this_userinfo)
+
+
+@app.route("/editprofile/<string:username>")
+def profile_edit(username):
+    this_user = get_user(username)
+    this_userinfo = get_userinfo(this_user.id)
+    return render_template("editprofile.html", username=username, userinfo=this_userinfo)
 
 
 # Login, signup, logout routes
@@ -93,11 +101,21 @@ def logout():
 
 
 # Submit form routes
+@app.route("/userinfosubmit", methods=["POST"])
+def userinfosubmit():
+    display_name = request.form.get("display-name", "")
+    email = request.form.get("email", "")
+    email_is_public = request.form.get("email-is-public", bool(False))
+    about_me = request.form.get("about-me", "")
+    edit_profile(session["username"], display_name, email, email_is_public, about_me)
+    return redirect(url_for("user", username=session["username"]))
+
+
 @app.route("/loginsubmit", methods=["POST"])
 def loginsubmit():
     username = request.form["username"]
     password = request.form["password"]
-    user = get_user(username)
+    user = get_user_login_info(username)
     if not user:
         cache["errormessage"] = "Käyttäjänimeä ei löydy"
         return redirect("/login")
@@ -116,7 +134,7 @@ def signupsubmit():
     password = request.form["password"]
     user_level = "user"
     hash_value = generate_password_hash(password)
-    found_user = get_user(username)
+    found_user = get_user_login_info(username)
     if not found_user:
         create_user(username, hash_value, user_level)
         return redirect("/signupsuccess")
@@ -188,7 +206,7 @@ def reply_delete(reply_id):
 
 
 @app.route("/editreply/<int:id>")
-def editreply(id):
+def reply_edit(id):
     reply = get_reply(id)
     if not reply:
         cache["errormessage"] = "Tapahtui virhe. Yritä myöhemmin uudelleen."

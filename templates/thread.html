@@ -38,8 +38,8 @@
 
 
         <div class="reply-actions-box">
-            <a href="{{ url_for('editreply', id=reply.id) }}"><img src="/static/pencil.png"></a>
-            <a href="{{ url_for('deletereply', reply_id=reply.id) }}"><img src="/static/trashcan.png"></a>
+            <a href="{{ url_for('reply_edit', id=reply.id) }}"><img src="/static/pencil.png"></a>
+            <a href="{{ url_for('reply_delete', reply_id=reply.id) }}"><img src="/static/trashcan.png"></a>
         </div>
         {% endif %}
         {% endif %}

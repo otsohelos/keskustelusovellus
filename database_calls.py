@@ -48,14 +48,31 @@ def get_category_name(category_id):
     return category_name
 
 
-def get_current_user(username):
+def get_user(username):
     sql = text("SELECT * FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username": username})
     current_user = result.fetchone()
     return current_user
 
 
-def get_user(username):
+def get_userinfo(id):
+    sql = text("SELECT * FROM userinfo WHERE user_id=:id")
+    result = db.session.execute(sql, {"id": id})
+    userinfo = result.fetchone()
+    return userinfo
+
+
+def edit_profile(username, display_name, email, email_is_public, about_me):
+    sql = text("SELECT * FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username": username})
+    current_user = result.fetchone()
+    sql = text("UPDATE userinfo SET display_name=:display_name, email_is_public=:email_is_public, email=:email, about_me=:about_me WHERE user_id=:user_id")
+    db.session.execute(sql, {"display_name": display_name, "email": email, "email_is_public": email_is_public, "about_me": about_me, "user_id": current_user.id})
+    db.session.commit()
+    current_user = result.fetchone()
+
+
+def get_user_login_info(username):
     sql = text("SELECT id, password FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
@@ -89,6 +106,7 @@ def submit_conversation(username, header, content, convo_category):
     )
     db.session.commit()
 
+
 def submit_reply(username, content_with_linebreaks, thread_id):
     sql = text(
         "INSERT INTO replies (username, content, thread_id) VALUES (:username, :content, :thread_id)"
@@ -103,16 +121,19 @@ def submit_reply(username, content_with_linebreaks, thread_id):
     )
     db.session.commit()
 
+
 def get_reply(reply_id):
     sql = text("SELECT * from replies where id=:id AND deleted_at IS NULL")
     result = db.session.execute(sql, {"id": reply_id})
     reply = result.fetchone()
     return reply
 
+
 def edit_reply(reply_id, content_with_linebreaks):
     sql = text("UPDATE replies SET content = :content WHERE id = :id")
     db.session.execute(sql, {"content": content_with_linebreaks, "id": reply_id})
     db.session.commit()
+
 
 def delete_reply(reply_id):
     sql = text("UPDATE replies SET deleted_at = :timestamp WHERE id=:id")

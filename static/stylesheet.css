@@ -151,6 +151,18 @@ body {
     border-radius: 8px;
     font-size: large;
     margin: 20px;
+  }  
+  
+  .edit-profile {
+    margin: 40px 0 0 0;
+    width: 300px;
+    height:30px;
+    border: 2px solid rgb(131, 166, 243);
+    background-color: rgb(178, 198, 241);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border-radius: 8px;
+    font-size: large;
+    margin: 20px;
   }
 
   .contentbox form input[type=submit] {

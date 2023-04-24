@@ -2,7 +2,22 @@
 
 {% block content %}
 
-    <h1>Käyttäjä</h1>
-Käyttäjän nimi on {{ user.username }}
+<h1><img class="usericon" src="/static/usericon.png"> Käyttäjä</h1>
+
+{% if userinfo.display_name %}
+<p class = "userinfo-line">Käyttäjän nimi: {{ userinfo.display_name }}</p>
+{% else %}
+<p class = "userinfo-line">Käyttäjän nimi: {{ user.username }}</p>
+{% endif %}
+{% if userinfo.email_is_public or user.username == session["username"] %}
+<p class = "userinfo-line">Sähköposti: {{ userinfo.email }}</p>
+{% endif %}
+<p class = "userinfo-line">Tietoa minusta:</p>
+<p class = "userinfo-line"> {{ userinfo.about_me }}</p>
+
+
+{% if user.username == session["username"] %}
+<p><a href="{{ url_for('profile_edit', username=user.username) }}"><button class="edit-profile">Muokkaa profiilitietoja</button></a></p>
+{% endif %}
 
 {% endblock %}

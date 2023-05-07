@@ -64,7 +64,8 @@ def category(category_id):
 def user(username):
     this_user = get_user(username)
     this_userinfo = get_userinfo(this_user.id)
-    return render_template("user.html", user=this_user, userinfo=this_userinfo)
+    this_about_me = this_userinfo.about_me.replace("\r", "<br>")
+    return render_template("user.html", user=this_user, userinfo=this_userinfo, about_me=this_about_me)
 
 
 @app.route("/editprofile/<string:username>")
@@ -105,9 +106,12 @@ def logout():
 def userinfosubmit():
     display_name = request.form.get("display-name", "")
     email = request.form.get("email", "")
-    email_is_public = request.form.get("email-is-public", bool(False))
+    email_is_public = False
+    if request.form.get("email-is-public"):
+        email_is_public = True
     about_me = request.form.get("about-me", "")
-    edit_profile(session["username"], display_name, email, email_is_public, about_me)
+    edit_profile(session["username"], display_name,
+                 email, email_is_public, about_me)
     return redirect(url_for("user", username=session["username"]))
 
 
@@ -170,7 +174,7 @@ def replysubmit(thread_id):
         cache["errormessage"] = "Kirjoita vastaus"
         return redirect(url_for("thread", thread_id=thread_id))
     username = session["username"]
-    content_with_linebreaks = content.replace("\r", "<br>")
+    content_with_linebreaks = content  # .replace("<br>", "\r")
     submit_reply(username, content_with_linebreaks, thread_id)
     return redirect(url_for("thread", thread_id=thread_id))
 
@@ -185,7 +189,7 @@ def replyeditsubmit(id):
         cache["reply_to_edit"] = id
         cache["errormessage"] = "Et voi muokata vastausta tyhjäksi"
         return redirect(url_for("thread", thread_id=thread_id))
-    content_with_linebreaks = content.replace("\r", "<br>")
+    content_with_linebreaks = content  # .replace("<br>", "\r")
     edit_reply(id, content_with_linebreaks)
     return redirect(url_for("thread", thread_id=thread_id))
 

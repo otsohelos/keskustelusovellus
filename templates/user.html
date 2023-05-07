@@ -2,9 +2,9 @@
 
 {% block content %}
 
-<h1><img class="usericon" src="/static/usericon.png"> Käyttäjä</h1>
+<h1><img class="usericon" src="/static/usericon.png"> {{ user.username }}</h1>
 
-{% if userinfo.display_name != "" %}
+{% if userinfo.display_name %}
 <p class = "userinfo-line"><b>Käyttäjän nimi:</b> {{ userinfo.display_name }}</p>
 {% else %}
 <p class = "userinfo-line"><b>Käyttäjän nimi:</b> {{ user.username }}</p>
@@ -13,7 +13,9 @@
 <p class = "userinfo-line"><b>Sähköposti:</b> {{ userinfo.email }}</p>
 {% endif %}
 <p class = "userinfo-line"><b>Tietoa minusta:</b></p>
-<p class = "userinfo-line"> {{ userinfo.about_me }}</p>
+{% autoescape false %}
+<p class = "userinfo-line"> {{ about_me }}</p>
+{% endautoescape %}
 
 {% if user.username == session["username"] %}
 <p><a href="{{ url_for('profile_edit', username=user.username) }}"><button class="edit-profile">Muokkaa profiilitietoja</button></a></p>

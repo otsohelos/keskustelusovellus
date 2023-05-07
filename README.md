@@ -56,7 +56,7 @@ Nyt voit käynnistää sovelluksen komennolla
 ```
 flask run
 ```
-Kehitysaikainen käynnistys, jossa muutokset päivittyvät sivun päivittyessä:
+<!--Kehitysaikainen käynnistys, jossa muutokset päivittyvät sivun päivittyessä:
 ```
 flask run --debug
-```
+```-->

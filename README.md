@@ -43,20 +43,20 @@ SECRET_KEY=<salainen-avain>
 ```
 Seuraavaksi aktivoi virtuaaliympäristö ja asenna sovelluksen riippuvuudet komennoilla
 ```
-$ python3 -m venv venv
-$ source venv/bin/activate
-$ pip install -r ./requirements.txt
+python3 -m venv venv
+source venv/bin/activate
+pip install -r ./requirements.txt
 ```
 
 Määritä vielä tietokannan skeema komennolla
 ```
-$ psql < schema.sql
+psql < schema.sql
 ```
 Nyt voit käynnistää sovelluksen komennolla
 ```
-$ flask run
+flask run
 ```
 Kehitysaikainen käynnistys, jossa muutokset päivittyvät sivun päivittyessä:
 ```
-$ flask run --debug
+flask run --debug
 ```

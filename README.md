@@ -8,29 +8,21 @@ Harjoitustyössäni toteutan keskustelusovelluksen, jossa käyttäjät voivat ki
 
 * Käyttäjä voi rekisteröidä uuden tunnuksen ja siihen liittyvän salasanan
 * Käyttäjä voi kirjautua sisään tunnuksella ja salasanalla
+* Sisäänkirjautunut käyttäjä voi aloittaa uuden keskustelun
 * Sisäänkirjautunut käyttäjä voi lukea olemassa olevia keskusteluja
 * Sisäänkirjautunut käyttäjä voi kommentoida olemassa olevia keskusteluja
 * Käyttäjä voi poistaa oman kommenttinsa
 * Käyttäjä voi muokata omaa kommenttiaan
 
-## Keskeiset ominaisuudet (suunnitelma)
 
-Sovellus tulee sisältämään seuraavat toiminnot:
-* Käyttäjä voi rekisteröidä uuden tunnuksen ja siihen liittyvän salasanan
-* Käyttäjä voi kirjautua sisään tunnuksella ja salasanalla
-* Sisäänkirjautunut käyttäjä voi lukea olemassa olevia keskusteluja
-* Sisäänkirjautunut käyttäjä voi kommentoida olemassa olevia keskusteluja
-* Sisäänkirjautunut käyttäjä voi aloittaa uuden keskustelun
-* Käyttäjä voi poistaa oman kommenttinsa
-* Käyttäjä voi muokata omaa kommenttiaan tai keskustelunaloitustaan
+## Sivunäkymät
 
-## Sivunäkymät (suunnitelma)
-
-Sovelluksessa tulee olemaan seuraavat näkymät:
+Sovelluksessa on seuraavat näkymät:
 * Uloskirjautuneelle käyttäjälle näkyy kirjautumis-/rekisteröintisivu
 * Sisäänkirjautuneelle käyttäjälle näkyy viimeisimpien keskustelunaloitusten lista
 * Keskustelun otsikkoa klikkaamalla saa näkyviin kyseisen keskustelun sivun, jolla näkyvät myös aloitukseen tulleet kommentit
 * Kirjautunut käyttäjä voi tarkastella omia tietojaan profiilisivulta
+* Kirjautunut käyttäjä voi klikata toisen käyttäjän nimeä ja tarkastella tämän julkisia profiilitietoja
 
 
 ## Käyttöohje paikalliseen testaukseen

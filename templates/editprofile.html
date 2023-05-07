@@ -8,6 +8,7 @@
 
 {% if userinfo.email_is_public %}
 <form action="/userinfosubmit" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="text" name="display-name" placeholder="Nimi" value="{{ userinfo.display_name }}">
     <br>
     <input type="text" name="email" placeholder="Sähköposti" value="{{ userinfo.email }}">
@@ -22,6 +23,7 @@
 </body>
 {% else %}
 <form action="/userinfosubmit" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="text" name="display-name" placeholder="Nimi" value="{{ userinfo.display_name }}">
     <br>
     <input type="text" name="email" placeholder="Sähköposti" value="{{ userinfo.email }}">

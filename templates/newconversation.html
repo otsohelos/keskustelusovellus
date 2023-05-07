@@ -6,6 +6,7 @@
 {% endif %}
     <h1>Uusi keskustelu</h1>
     <form action="/newconversationsubmit" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="text" name="convo-header" placeholder="Otsikko" value="{{ header }}">
         <br>
         <select id="category" name="convo-category">

@@ -1,6 +1,7 @@
+import secrets
 from app import app
 from database_calls import *
-from flask import render_template
+from flask import abort, render_template
 from cache import cache
 from flask import url_for, render_template, request, redirect, session
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -104,6 +105,8 @@ def logout():
 # Submit form routes
 @app.route("/userinfosubmit", methods=["POST"])
 def userinfosubmit():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     display_name = request.form.get("display-name", "")
     email = request.form.get("email", "")
     email_is_public = False
@@ -126,6 +129,7 @@ def loginsubmit():
     hash_value = user.password
     if check_password_hash(hash_value, password):
         session["username"] = username
+        session["csrf_token"] = secrets.token_hex(16)
     else:
         cache["errormessage"] = "Väärä salasana"
         return redirect("/login")
@@ -149,6 +153,8 @@ def signupsubmit():
 
 @app.route("/newconversationsubmit", methods=["POST"])
 def newconversationsubmit():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     header = request.form.get("convo-header", "")
     content = request.form.get("convo-content", "")
     convo_category = int(request.form.get("convo-category", 0))
@@ -168,6 +174,8 @@ def newconversationsubmit():
 
 @app.route("/replysubmit/<int:thread_id>", methods=["POST"])
 def replysubmit(thread_id):
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     content = request.form.get("reply-content", "")
     if content == "":
         cache["content"] = content
@@ -181,6 +189,8 @@ def replysubmit(thread_id):
 
 @app.route("/replyeditsubmit/<int:id>", methods=["POST"])
 def replyeditsubmit(id):
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     content = request.form.get("reply-content", "")
     reply = get_reply(id)
     thread_id = reply.thread_id

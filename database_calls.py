@@ -17,7 +17,7 @@ def get_all():
 
 def get_thread(thread_id):
     sql = text(
-        "SELECT * FROM conversations LEFT JOIN categories ON conversations.category=categories.id WHERE conversations.id=:thread_id")
+        "SELECT conversations.id as id, username, header, content, category, display_name FROM conversations LEFT JOIN categories ON conversations.category=categories.id WHERE conversations.id=:thread_id")
     result = db.session.execute(sql, {"thread_id": thread_id})
     message = result.fetchone()
     return message
@@ -87,6 +87,16 @@ def create_user(username, hash_value, user_level):
         "username": username,
         "password": hash_value,
         "userlevel": user_level
+    })
+    db.session.commit()
+    sql = text("SELECT * FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username": username})
+    current_user = result.fetchone()
+    sql = text(
+        "INSERT INTO userinfo (user_id) VALUES (:user_id)"
+    )
+    db.session.execute(sql, {
+        "user_id": current_user.id
     })
     db.session.commit()
 
